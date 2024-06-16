@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Главная страница</title>
+    <style>
+        /* Общие стили для всей страницы */
+        body {
+            background-color: #121212; /* Темный фон страницы */
+            color: #ffffff; /* Белый текст на странице */
+            font-family: Arial, sans-serif; /* Шрифт для текста на странице */
+            margin: 0; /* Убирает внешний отступ страницы */
+            padding: 20px; /* Внутренний отступ страницы */
+            display: flex; /* Делает body контейнером flex */
+            flex-direction: column; /* Элементы внутри body располагаются в столбик */
+            align-items: center; /* Центрирует содержимое по горизонтали */
+        }
+
+        /* Стили для заголовка */
+        h1 {
+            text-align: center; /* Выравнивание текста заголовка по центру */
+            margin-bottom: 20px; /* Отступ снизу заголовка */
+        }
+
+        /* Стили для кнопки "Загрузить" */
+        .upload-btn {
+            background-color: #00e5bc; /* Фон кнопки */
+            color: black; /* Цвет текста кнопки */
+            padding: 10px 20px; /* Внутренний отступ кнопки */
+            text-decoration: none; /* Убирает подчеркивание текста */
+            font-size: 18px; /* Размер шрифта текста */
+            border-radius: 5px; /* Скругление углов кнопки */
+            display: block; /* Блочное отображение кнопки (новая строка до и после) */
+            margin: 20px auto; /* Автоматический отступ слева и справа для центрирования */
+            transition: background-color 0.3s; /* Плавное изменение цвета при наведении */
+        }
+
+        .upload-btn:hover {
+            background-color: #07b395; /* Темно-зеленый фон при наведении */
+        }
+
+        /* Стили для формы поиска */
+        .wrapper {
+            text-align: center; /* Центрирует содержимое формы */
+            width: 100%; /* Ширина формы равна ширине контейнера */
+            margin: 20px 0; /* Вертикальные отступы сверху и снизу */
+        }
+<!--        .search-input {-->
+<!--            position: relative;-->
+<!--            display: flex; /* Убедитесь, что это flex контейнер, если нужно расположить кнопку в строку с полем ввода */-->
+<!--            width: 100%; /* или другое фиксированное значение, если нужно */-->
+<!--        }-->
+
+        .search-input input[type="text"] {
+            padding: 10px; /* Внутренний отступ поля ввода */
+            width: 60%; /* Ширина поля ввода */
+            border: none; /* Убирает рамку поля */
+            border-radius: 5px; /* Скругление углов поля */
+        }
+
+        .search-input button {
+            padding: 10px 20px; /* Внутренний отступ кнопки */
+            background-color: #00e5bc; /* фон кнопки, как у кнопки "Загрузить" */
+            color: black; /* Цвет текста кнопки */
+            border: none; /* Убирает рамку кнопки */
+            border-radius: 5px; /* Скругление углов кнопки */
+            cursor: pointer; /* Курсор в виде указателя при наведении */
+        }
+
+        .search-input button:hover {
+            background-color: #07b395; /* Темно-зеленый фон при наведении */
+        }
+
+        /* Контейнер для видео */
+        .video-container {
+            display: flex; /* Делает контейнер flex */
+            flex-direction: column; /* Элементы в контейнере располагаются в столбик */
+            align-items: center; /* Центрирует видео по горизонтали */
+            width: 100%; /* Ширина контейнера равна ширине родителя */
+        }
+
+        /* Стили для каждого блока видео */
+        .video-box {
+            display: flex; /* Делает блок видео flex контейнером */
+            align-items: center; /* Выравнивает содержимое по центру по вертикали */
+            background-color: #333; /* Темный фон для видео */
+            padding: 10px; /* Внутренний отступ вокруг видео */
+            border-radius: 5px; /* Скругление углов блока видео */
+            width: 650px; /* Фиксированная ширина блока видео */
+            margin-bottom: 10px; /* Отступ между блоками видео */
+            justify-content: space-between; /* Распределяет содержимое по краям блока */
+        }
+
+        /* Стили для видео */
+        video {
+            width: 480px; /* Ширина видеоплеера */
+            height: 270px; /* Высота видеоплеера */
+            border-radius: 5px; /* Скругление углов видеоплеера */
+        }
+
+        /* Стили для параграфа с тегами */
+        p {
+            margin-left: 10px; /* Отступ слева от видео */
+            color: #bbb; /* Серый цвет текста тегов */
+            flex: 1; /* Занимает оставшееся пространство в блоке */
+            text-align: left; /* Выравнивание текста тегов по левому краю */
+        }
+
+        .autocom-box li {
+        list-style: none;
+        padding: 8px 12px;
+        display: none;
+        width: 100%;
+        cursor: default;
+        border-radius: 3px;
+        }
+
+        .search-input.active .autocom-box li {
+        display: block;
+        }
+        .autocom-box li:hover {
+        background: #00e5bc;
+        }
+    </style>
+</head>
+<body>
+<h1>Поисковик Yappy</h1>
+
+<a href="/upload" class="upload-btn">+ Загрузить</a>
+<form method="POST">
+<div class="wrapper">
+    <div class="search-input">
+        <a href="" target="_blank" hidden></a>
+        <input type="text" name="search" placeholder="Type to search.." value="{{ search_query }}">
+        <button type="submit">Поиск</button>
+        <div class="autocom-box">
+        </div>
+    </div>
+</div>
+</form>
+<div class="video-container">
+    {% if videos %}
+    {% for video in videos %}
+        <div class="video-box">
+            <video controls>
+                <source src="{{ video[0] }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+           <p>{{ video[1] }}</p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Для отображения видео введите название.</p>
+{% endif %}
+</div>
+</body>
+<script>
+    let suggestions = [
+"ceramicartist",
+"инди-разработчик",
+"scientific",
+"косметолог",
+"интересные факты",
+"hockey club",
+"demonslayer",
+"инвентарь",
+"нарезка сериалов",
+"model",
+"новости",
+"tutorial",
+"до после",
+"маникюр",
+"бьюти рутина",
+"lush breasts",
+"girlfriend",
+"anstropsychology",
+"река",
+"платье",
+"обманывать",
+"последователь",
+"пс5",
+"мото",
+"парк горького",
+"vehicle",
+"баня",
+"potterylove",
+"мультик",
+"tracks",
+"мода",
+"литература",
+"вдохновение",
+"eyelashes",
+"ass",
+"basketball",
+"computer club",
+"элденринг",
+"breast",
+"инстакерамика",
+"magician",
+"дизайн",
+"красивые девочки",
+"app review",
+"китай",
+"legs",
+"looks",
+"hairstyle",
+"блюлок",
+"motorsports",
+"красивые азиатки",
+"статус whatsapp",
+"ceramicstudio",
+"cyberpunk",
+"узнавать вместе",
+"керамическое искусство",
+"киберспорт",
+"похудение",
+"ceramicart",
+"скакалка",
+"отношение",
+"do it yourself",
+"pomeranian",
+"beauties",
+"мечта",
+"атака титанов",
+"divination",
+"асмон",
+"таро расклад",
+"digital art",
+"юбка",
+"iron horse",
+"советы врача",
+"chemistry",
+"выбор авто",
+"младенцы",
+"полезные приложения",
+"aesthetic",
+"growth",
+"design",
+"chihuahua",
+"одиночество",
+"мастер бровист",
+"детская психология",
+"tutor",
+"уходовая косметика",
+"аниме фигурки",
+"facial treatment",
+"little humor for them",
+"paris",
+"шortы",
+"milkisbtw",
+"child psychology",
+"крипта",
+"большой попой",
+"asiangirl",
+"механическая клавиатура",
+"kuklы",
+"anime moment",
+"смешно",
+"demon cleaving blade",
+"eyebrow artist samara",
+"astrologer hair forecast",
+"motorbike",
+"мотокросс",
+"прикол",
+"girls and cars",
+"body",
+"хоккей",
+"forza horizon",
+"success",
+"comedy",
+"shorts with",
+"minecraftbuilds",
+"милая девушка",
+"stream cuts",
+"moments",
+"magictricks",
+"gamedev",
+"bmw",
+"layout",
+"meat only meat",
+"природа",
+"косплей",
+"car selection",
+"шпицы москвы",
+"хоккейный клуб",
+"styling",
+"успешные люди",
+"автосалон",
+"пабг",
+"trainer",
+"лес",
+"казахстан",
+"hotgirl",
+"ниссан",
+"dream",
+"могилев",
+"модный показ",
+"travelers",
+"sexygirl",
+"декретные будни",
+"клинок рассекающий демонов",
+"зима",
+"топ5",
+"for children",
+"форза горизонт",
+"страшилка",
+"легковые автомобили",
+"yappy",
+"mystic",
+"косметика",
+"врач",
+"exams",
+"boss battles",
+"asmr",
+"literature",
+"colizeumarena",
+"модный лук",
+"маркбартон",
+"брови",
+"behind the scenes",
+"азиатка",
+"женская одежда",
+"инвестиции",
+"керамик",
+"anime figure",
+"ozone",
+"футбольный клуб",
+"english language",
+"путешествовать",
+"proper nutrition",
+"самара",
+"деньги",
+"предсказательница",
+"football club",
+"полировка",
+"what to see",
+"artist",
+"веселая астрология гол вина",
+"ножки",
+"воспитание детей",
+"russia",
+"fashion",
+"reels",
+"rust",
+"фифа",
+"азиат",
+"fashionable bow",
+"математика",
+"мотивация",
+"кинохроника",
+"beauty secret",
+"дождь",
+"south park",
+"компьютерный клуб",
+"цели",
+"нейросеть",
+"compilation series",
+"технологии",
+"money",
+"тойота",
+"meme",
+"бизнес",
+"fortune teller",
+"pleasant sounds",
+"популярный",
+"любители леса",
+"illusionist",
+"whatsapp status",
+"гадание таро",
+"для тебя",
+"cosmetics",
+"game play",
+"sweet",
+"моменты аниме",
+"mark bar tone",
+"excerpt from the film",
+"единство",
+"anime clip",
+"сексуальные азиатки",
+"investments",
+"скульптура",
+"психология отношений",
+"contemporary ceramics",
+"cartoons",
+"туалет",
+"нарезка стрима",
+"sexygirls",
+"психология",
+"gym",
+"фишки",
+"факты",
+"capricorn",
+"purchases",
+"cardtrick",
+"skibiditoilet",
+"рецепт",
+"homemade",
+"new year",
+"здоровое питание",
+"master client",
+"модный образ",
+"humor",
+"fortune telling for free",
+"earnings",
+"сознаниезнание",
+"машины",
+"recipe",
+"ka ver",
+"path",
+"керамическая скульптура",
+"любовь",
+"astrologer",
+"wow",
+"movie for the evening",
+"музыка",
+"football",
+"dis her",
+"9гаг",
+"умскул",
+"sweetgirl",
+"texturedart",
+"self-study",
+"porcelain",
+"diet",
+"numerology",
+"фокусник",
+"switzerland",
+"mercedes",
+"weight loss",
+"тачки",
+"ламборджини",
+"марафон контента тявкает",
+"раскрыта магия",
+"videogames",
+"following",
+"следовать",
+"счет",
+"дикая природа",
+"cat",
+"подруга",
+"танец танец",
+"диета",
+"yoga",
+"лайфхаки",
+"знаменитости",
+"ох",
+"short",
+"babies",
+"водолей",
+"prediction",
+"inspiration",
+"отпуск",
+"комедия",
+"italia",
+"samsung",
+"смешное",
+"before after",
+"mogilev",
+"обзор",
+"интересный фильм",
+"training",
+"модель",
+"suprem",
+"собаки",
+"странный",
+"амг",
+"ios",
+"mountain views",
+"laptop",
+"футболисты",
+"клавиатура",
+"море",
+"красивые девушки",
+"japan",
+"flight",
+"top5",
+"sexydance",
+"asian",
+"авто",
+"а ты знал",
+"наука",
+"books",
+"астролог",
+"здоровье",
+"интересный",
+"useful videos",
+"полимерная глина",
+"successful people",
+"как мистер видео",
+"расклад",
+"горы",
+"daily horoscope",
+"отзывы",
+"casual clothes",
+"goal",
+"gaming",
+"love",
+"magic",
+"abl",
+"amg",
+"ceramicsculpture",
+"дисней",
+"stalker",
+"выглядит",
+"мат",
+"women's fashion",
+"неиперте",
+"баскетбол",
+"handmade",
+"quotes",
+"нарезка игры",
+"comic",
+"newsreel",
+"мерседес",
+"frog",
+"ногти",
+"glaze",
+"горячие девчонки",
+"эстетический",
+"the science",
+"technologies",
+"керамика любовь",
+"детское развитие",
+"glamping",
+"how to stop drinking",
+"советы",
+"forest",
+"with your own hands",
+"let's study together",
+"relationship with you",
+"colizeum",
+"target",
+"кровать",
+"красивый",
+"филм",
+"makeup",
+"джесукким",
+"футбол",
+"ютубшорты",
+"gacha",
+"jokes",
+"трюки",
+"женская мода",
+"psch",
+"experiments",
+"italy",
+"гриффины",
+"3dmodeling",
+"киа",
+"girls",
+"путь",
+"psychologist",
+"animals",
+"bathhouse",
+"hockey match",
+"muscles",
+"chips",
+"memes",
+"горячие девушки",
+"рыба",
+"кино новинки",
+"эмоции",
+"android chips",
+"уроки гитары",
+"художник",
+"let her know",
+"подарок",
+"butt",
+"life",
+"texture",
+"детки",
+"games",
+"домна колесах",
+"цифровое искусство",
+"фотография",
+"мышца",
+"детство",
+"russian history",
+"разработка игр",
+"посуда",
+"ухищрение",
+"смешное видео",
+"pussy",
+"horror",
+"wildlife",
+"шпицы",
+"искусство дня",
+"serial cutting",
+"voice acting",
+"xbox",
+"motherhood",
+"photo location",
+"мойка",
+"watch",
+"licarbx",
+"tarolog online",
+"любители деревьев",
+"живопись",
+"dermatologist",
+"восстановление",
+"к эм пинг",
+"artprocess",
+"история егэ",
+"дюйцки",
+"tableware",
+"тренировка",
+"стилист",
+"tattoo",
+"смешарики",
+"нарезка кино",
+"beautiful asians",
+"туризм",
+"top anime",
+"numero log",
+"dolls",
+"фотоссия",
+"gta",
+"кыргызстан",
+"stylish look",
+"kia",
+"sexyoutfits",
+"doctor",
+"scientific pop",
+"правильное питание",
+"серриал",
+"family",
+"готовка",
+"девушки",
+"париж",
+"glmv",
+"ceramica",
+"любители природы",
+"управо",
+"современная керамика",
+"катушки",
+"animeedits",
+"sexy outfit",
+"ликарбкс",
+"гачагача",
+"forkids",
+"cybersport",
+"учимся вместе",
+"skin care",
+"illustration",
+"makeup st. petersburg",
+"черныйсеребряный",
+"eldenring",
+"playing squid",
+"кондитерская",
+"jjk",
+"rest",
+"декоративная косметика",
+"выборка",
+"красивая фигура",
+"naruto",
+"киска",
+"произведение искусства",
+"hockey",
+"иллюзионист",
+"франция",
+"эндуро",
+"топ аниме",
+"перте",
+"девушка в бикини",
+"clay",
+"skirt",
+"показ",
+"рецепты",
+"hair",
+"love family",
+"транспортное средство",
+"anime moments",
+"нарезки стримов",
+"beach",
+"сексуальное белье",
+"белер",
+"сакура",
+"здоровье ребенка",
+"aiart",
+"проказницы",
+"велоспорт",
+"украшения",
+"картина маслом",
+"development",
+"бровист самара",
+"jordans",
+"эстетика",
+"reviews",
+"финансы",
+"сим бочка",
+"kids toys",
+"футбольный",
+"один кусочек",
+"fifa",
+"moscow guide",
+"interesting places",
+"race",
+"beautiful views",
+"научное",
+"туфли",
+"turkey",
+"керамическая студия",
+"relationship",
+"incredible",
+"консоль",
+"пластилин",
+"ван пис",
+"story",
+"mechanical keyboard",
+"ландшафтный дизайн",
+"отношения с собой",
+"покупка",
+"макияж",
+"гол",
+"гача",
+"xiaomi",
+"beautiful view",
+"nissan",
+"железный конь",
+"show business",
+"dry cleaning",
+"astrology",
+"wildlife photography",
+"невероятно",
+"волшебник",
+"trailers",
+"дети",
+"twitch",
+"dota 2",
+"лев",
+"eyelash extensions",
+"genshin impact",
+"секиро",
+"озон",
+"consoles",
+"зож",
+"постановка",
+"southpark",
+"nails",
+"shoes",
+"кросс",
+"csgo",
+"перманент",
+"раст",
+"керамика ручной работы",
+"сексуальный наряд",
+"южный парк",
+"джейк",
+"аниме момент",
+"отель",
+"фотография природы",
+"духовка",
+"художник-керамист",
+"марк бар тон",
+"motocross",
+"абстрактное искусство",
+"playstation",
+"tarot spread",
+"мистика",
+"think",
+"style",
+"scales",
+"bikinigirl",
+"follow",
+"yourname",
+"фото путешествия",
+"топ-5",
+"anime edit",
+"техника",
+"repair",
+"gaming easter l ki",
+"car showroom",
+"日本の風景",
+"модный блоггер",
+"aarzoo khurana photography",
+"beauty routine",
+"sticky",
+"глмв",
+"lifehack",
+"спа",
+"красавица",
+"венеция",
+"составить",
+"follow me",
+"удивительные факты",
+"having developed",
+"coliseum",
+"journey",
+"top movies",
+"как мистер",
+"aesthetics",
+"гачаклуб",
+"перевоплощения",
+"rain",
+"alcoholism treatment",
+"sport",
+"swimsuit",
+"happiness",
+"сексуальный",
+"лето",
+"artoftheday",
+"иллхсттрахия",
+"funny astrology holo wine",
+"bro whist",
+"сексуальные девушки",
+"indiegamedev",
+"craft",
+"iphone",
+"markbarton",
+"думать",
+"prankgirls",
+"чулки",
+"капсула",
+"beautifulgirls",
+"сравнение",
+"permanent makeup",
+"пастичерия",
+"трейлеры",
+"фарфор",
+"business",
+"polishing",
+"p2p",
+"transition",
+"цитаты",
+"лечение алкоголизма",
+"большой зад",
+"детские игрушки",
+"гарри поттер",
+"треки",
+"tricks and secrets",
+"top series",
+"внимание"
+]
+
+
+    const searchWrapper = document.querySelector(".search-input");
+const inputBox = searchWrapper.querySelector("input");
+const suggBox = searchWrapper.querySelector(".autocom-box");
+
+inputBox.onkeyup = (e) => {
+    let userData = e.target.value;
+    let emptyArray = [];
+    if (userData) {
+        emptyArray = suggestions.filter((data) => {
+            return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase());
+        }).slice(0, 5); // Ограничение на 5 элементов
+        emptyArray = emptyArray.map((data) => {
+            return `<li>${data}</li>`;
+        });
+        searchWrapper.classList.add("active");
+        showSuggestions(emptyArray);
+        let allList = suggBox.querySelectorAll("li");
+        for (let i = 0; i < allList.length; i++) {
+            allList[i].addEventListener("click", function() {
+                select(this);
+            });
+        }
+    } else {
+        searchWrapper.classList.remove("active");
+    }
+};
+
+function select(element) {
+    let selectData = element.textContent;
+    inputBox.value = selectData;
+    searchWrapper.classList.remove("active");
+}
+
+function showSuggestions(list) {
+    let listData;
+    if (!list.length) {
+        userValue = inputBox.value;
+        listData = `<li>${userValue}</li>`;
+    } else {
+        listData = list.join('');
+    }
+    suggBox.innerHTML = listData;
+}
+</script>
+
+</html>

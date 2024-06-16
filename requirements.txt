@@ -1,0 +1,13 @@
+Jinja2
+json
+einops 
+pillow
+opencv-python
+timm transformers
+tqdm
+pandas
+torch
+transformers
+pandas
+numpy
+easyocr

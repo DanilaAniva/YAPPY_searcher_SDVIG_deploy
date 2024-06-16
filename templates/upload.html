@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка Видео</title>
+<style>
+        /* Устанавливаем box-sizing для всех элементов, чтобы включать padding и border в общую шируну и высоту */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Общие стили для всего тела страницы */
+        body {
+            font-family: Arial, sans-serif; /* Шрифт для текста на странице */
+            margin: 0; /* Убираем внешние отступы */
+            padding: 20px; /* Внутренние отступы вокруг всего содержимого */
+            background-color: #121212; /* Темный фон страницы */
+            color: #ffffff; /* Белый текст */
+            display: flex; /* Flex контейнер для центрирования содержимого */
+            justify-content: center; /* Центрируем по горизонтали */
+            align-items: center; /* Центрируем по вертикали */
+            height: 100vh; /* Высота вьюпорта для центрирования по вертикали */
+        }
+
+        /* Стили для контейнера формы */
+        .container {
+            max-width: 800px; /* Максимальная ширина контейнера */
+            width: 90%; /* Ширина контейнера на 90% экрана для адаптивности */
+            padding: 20px; /* Внутренние отступы внутри контейнера */
+            background: #333; /* Темный фон контейнера */
+            border-radius: 8px; /* Скругленные углы контейнера */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Тень вокруг контейнера для объема */
+            position: relative; /* Относительное позиционирование для корректного расположения кнопки назад */
+        }
+
+        /* Стили для заголовка */
+        h1 {
+            text-align: center; /* Центрирование текста заголовка */
+            margin-bottom: 20px; /* Отступ снизу заголовка */
+        }
+
+        /* Стили для групп элементов формы */
+        .form-group {
+            margin-bottom: 20px; /* Отступ снизу группы элементов формы для разделения */
+        }
+
+        /* Стили для меток элементов формы */
+        .form-group label {
+            display: block; /* Блочный элемент */
+            margin-bottom: 5px; /* Отступ снизу метки */
+            font-size: 16px; /* Размер шрифта меток */
+        }
+
+        /* Стили для текстовых полей, URL полей, полей для файлов и текстовых областей */
+        .form-group input[type="text"],
+        .form-group input[type="url"],
+        .form-group input[type="file"],
+        .form-group textarea {
+            width: 100%; /* Ширина 100% контейнера */
+            padding: 12px; /* Внутренние отступы внутри полей */
+            border: 1px solid #ddd; /* Светлый контур вокруг полей */
+            background: #222; /* Темный фон полей */
+            color: #fff; /* Белый текст внутри полей */
+            border-radius: 4px; /* Скругленные углы полей */
+        }
+
+        /* Стили для текстовой области (для тегов) */
+        .form-group textarea {
+            resize: vertical; /* Вертикальное изменение размера */
+            height: 80px; /* Высота текстовой области */
+        }
+
+        /* Стили для кнопки */
+        .btn {
+            display: block; /* Блочный элемент */
+            width: 100%; /* Ширина 100% контейнера */
+            padding: 12px; /* Внутренние отступы внутри кнопки */
+            background-color: #00e5bc; /* фон кнопки */
+            color: black; /* Цвет текста кнопки */
+            border: none; /* Без контура */
+            border-radius: 4px; /* Скругленные углы кнопки */
+            font-size: 18px; /* Размер шрифта кнопки */
+            cursor: pointer; /* Указатель при наведении */
+        }
+
+        /* Стили для кнопки при наведении */
+        .btn:hover {
+            background-color: #07b395; /* Темно-зеленый фон при наведении */
+        }
+
+        /* Стили для круглой кнопки Назад */
+        .btn-back {
+            position: absolute; /* Абсолютное позиционирование */
+            top: 20px; /* Отступ сверху */
+            left: 20px; /* Отступ слева */
+            width: 50px; /* Ширина кнопки */
+            height: 50px; /* Высота кнопки */
+            border-radius: 50%; /* Делаем кнопку круглой */
+            display: flex; /* Используем flex для центрирования иконки или текста */
+            justify-content: center; /* Центрирование содержимого по горизонтали */
+            align-items: center; /* Центрирование содержимого по вертикали */
+            text-decoration: none; /* Убираем подчеркивание текста */
+            background-color: #555; /* Серый фон кнопки */
+            color: white; /* Белый текст */
+            font-size: 24px; /* Размер шрифта */
+            cursor: pointer; /* Указатель при наведении */
+        }
+
+        .btn-back:hover {
+            background-color: #07b395; /* Светло-зеленый фон при наведении */
+        }
+        #loading {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7); /* Затемняем фон немного больше */
+            z-index: 1000;
+        }
+
+        #loading-text {
+            color: white; /* Белый цвет текста для контраста */
+            font-size: 20px; /* Размер шрифта */
+            font-weight: bold; /* Жирное начертание */
+            margin-bottom: 20px; /* Отступ от текста до GIF */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Тень для текста, чтобы улучшить читаемость на разном фоне */
+        }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Укажите url видео клипа</h1>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="video-url">Укажите ссылку на видео (URL):</label>
+                <input type="url" id="video-url" name="video-url" placeholder="https://example.com/video.mp4">
+            </div>
+            <div class="form-group">
+                <label for="video-links-file">Загрузите JSON файл с ссылками на видео файлы:</label>
+                <input type="file" id="video-links-file" name="video-links-file" accept=".json">
+            </div>
+<!--            <div class="form-group">-->
+<!--                <label for="video-title">Название ролика:</label>-->
+<!--                <input type="text" id="video-title" name="video-title">-->
+<!--            </div>-->
+            <div class="form-group">
+                <label for="video-tags">Теги (через запятую):</label>
+                <textarea id="video-tags" name="video-tags" placeholder="тег1, тег2, тег3"></textarea>
+            </div>
+            <div id="loading" style="display: none;">
+                <div id="loading-text">Подождите, идет загрузка видео файлов</div>
+                <img src="/static/pedropedropedro.gif" alt="Loading...">
+            </div>
+
+
+            <button type="submit" class="btn">Загрузить Видео</button>
+        </form>
+        <a href="/" class="btn btn-back">&#x2190;</a>
+    </div>
+</body>
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    e.preventDefault(); // Предотвратить стандартную отправку формы
+    document.getElementById('loading').style.display = 'flex'; // Показать индикатор загрузки
+    this.submit(); // Отправка формы
+});
+</script>
+
+</html>
