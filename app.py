@@ -1,9 +1,8 @@
 import json
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
-from pymilvus import connections, Collection
 from tqdm import tqdm
 from PIL import Image
-from nn_functions import *
+from nn_functions import extract_video_features, extract_text_from_video
 import os
 import pandas as pd
 import numpy as np
@@ -29,7 +28,7 @@ def load_data_from_pkl():
     return data
 
 
-def insert_video_to_pickle(link, tags, embd,ocr_text):
+def insert_video_to_pickle(link, tags, embd, ocr_text):
     # Путь к файлу данных
     try:
         # Загрузка существующих данных
@@ -57,8 +56,11 @@ def insert_video_to_pickle(link, tags, embd,ocr_text):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     search_query = request.form.get('search', '')
-    ten_videos = []
+
+    combined_videos =[]
     # ten_tags = []
+    ten_videos = []
+    mixed_videos = []
     if search_query:
         search_query_eng = translator.translate(search_query).text
         videos = load_data_from_pkl()
@@ -66,15 +68,36 @@ def index():
         videos['score'] = model_clip.encode_text(search_query_eng) @ np.stack(videos['embds'].values).T
         # ten_videos = videos.sort_values(by='score', ascending=False)[['link', 'description']].head(15).values
         ten_videos = [list(i) for i in list(
-            videos.sort_values(by='score', ascending=False)[['link', 'description']].head(15).fillna('').values)]
-        eng_teg_video = [list(i) for i in list(
-            videos[videos['description'].fillna('').str.contains(search_query_eng, regex=False)][['link', 'description']].head(10).values)]
-        teg_video = [list(i) for i in list(
-            videos[videos['description'].fillna('').str.contains(search_query, regex=False)][['link', 'description']].head(10).values)]
-        combined_videos = pd.concat([eng_teg_video, teg_video]).drop_duplicates().head(10)
+            videos.sort_values(by='score', ascending=False)[['link', 'description']].head(10).fillna('').values)]
 
 
-    return render_template('index.html', videos=combined_videos, search_query=search_query)
+        combined_videos = [
+                              list(item)
+                              for item in
+                              videos[videos['description'].fillna('').str.contains(search_query, regex=False)][
+                                  ['link', 'description']].head(4).values
+                          ] + [
+                              list(item)
+                              for item in
+                              videos[videos['description'].fillna('').str.contains(search_query_eng, regex=False)][
+                                  ['link', 'description']].head(4).values
+                          ]
+
+
+        i = 0
+        while i < len(ten_videos) and i < len(combined_videos):
+            mixed_videos.append(ten_videos[i])
+            mixed_videos.append(combined_videos[i])
+            i += 1
+
+        if i < len(ten_videos):
+            mixed_videos.extend(ten_videos[i:])
+        elif i < len(combined_videos):
+            mixed_videos.extend(combined_videos[i:])
+
+        mixed_videos = mixed_videos[:10]
+
+    return render_template('index.html', videos=mixed_videos, search_query=search_query)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -96,12 +119,16 @@ def upload():
                 embedding = extract_video_features(link, model_clip)
                 print("embedding.shape", embedding.shape)
                 ocr_text = extract_text_from_video(link)
+
+
                 # print("ocr_text", ocr_text)
                 insert_video_to_pickle(link, tags, embedding, ocr_text)
 
         if video_url:
             embedding = extract_video_features(video_url, model_clip)
-            insert_video_to_pickle(video_url, video_tags, embedding)
+            tags = video_tags if video_tags else None
+            ocr_text = extract_text_from_video(video_url)
+            insert_video_to_pickle(video_url, tags, embedding, ocr_text)
 
     return render_template('upload.html')
 
